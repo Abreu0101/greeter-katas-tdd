@@ -11,11 +11,14 @@ import XCTest
 struct Greeter {
     typealias CurrentDateProvider = () -> Date
     private let currentDateProvider: CurrentDateProvider
-    private let timeZone: TimeZone
+    private let calendar: Calendar
     
-    init(currentDateProvider: @escaping CurrentDateProvider, timezone: TimeZone) {
+    init(currentDateProvider: @escaping CurrentDateProvider, timeZone: TimeZone) {
         self.currentDateProvider = currentDateProvider
-        self.timeZone = timezone
+        
+        var calendar = Calendar.init(identifier: .gregorian)
+        calendar.timeZone = timeZone
+        self.calendar = calendar
     }
     
     func greet(name: String) -> String {
@@ -26,8 +29,6 @@ struct Greeter {
     
     private func greetingMessagePrefix() -> String {
         let currentDate = currentDateProvider()
-        var calendar = Calendar.init(identifier: .gregorian)
-        calendar.timeZone = timeZone
         let hour = calendar.component(.hour, from: currentDate)
         switch hour {
         case 6..<12:
@@ -107,7 +108,7 @@ class GreeterTests: XCTestCase {
     // MARK: - Helpers
     
     private func makeSUT(currentDateProvider: @escaping Greeter.CurrentDateProvider = Date.anyMorning) -> Greeter {
-        return Greeter(currentDateProvider: currentDateProvider, timezone: UTCTimeZone())
+        return Greeter(currentDateProvider: currentDateProvider, timeZone: UTCTimeZone())
     }
     
     private func UTCTimeZone() -> TimeZone {
