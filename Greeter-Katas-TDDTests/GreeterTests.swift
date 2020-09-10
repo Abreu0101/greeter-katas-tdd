@@ -47,6 +47,18 @@ class GreeterTests: XCTestCase {
         XCTAssertEqual(receivedGreetingMessage, "Good Morning José")
     }
     
+    func test_greet_outputMorningGreetingMessageDuringMorningInterval() {
+        let morningInterval = 6..<12
+        morningInterval.forEach({ morningHour in
+            let fixedMorningDate = Date().with(hour: morningHour)
+            let sut = makeSUT(currentDateProvider: { fixedMorningDate })
+            
+            let receivedGreetingMessage = sut.greet(name: "José")
+            
+            XCTAssertEqual(receivedGreetingMessage, "Good Morning José")
+        })
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(currentDateProvider: @escaping Greeter.CurrentDateProvider = Date.anyMorning) -> Greeter {
@@ -59,6 +71,11 @@ fileprivate extension Date {
     
     static func anyMorning() -> Date {
         Date(timeIntervalSince1970: 1599728400) // 09/10/2020 @ 9:00am (UTC)
+    }
+    
+    func with(hour: Int) -> Date {
+        let calendar = Calendar(identifier: .gregorian)
+        return calendar.date(bySettingHour: hour, minute: 0, second: 0, of: self)!
     }
     
 }
