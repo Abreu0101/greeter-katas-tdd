@@ -10,6 +10,7 @@
 		5B709350250A77CD007262D6 /* Greeter_Katas_TDD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B709346250A77C8007262D6 /* Greeter_Katas_TDD.framework */; };
 		5B709357250A77CD007262D6 /* Greeter_Katas_TDD.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B709349250A77C8007262D6 /* Greeter_Katas_TDD.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5BA85648250A7D6E00C3174C /* GreeterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA85647250A7D6E00C3174C /* GreeterTests.swift */; };
+		5BA8564A250AA35400C3174C /* Greeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA85649250AA35300C3174C /* Greeter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +30,7 @@
 		5B70934F250A77CD007262D6 /* Greeter-Katas-TDDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Greeter-Katas-TDDTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B709356250A77CD007262D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5BA85647250A7D6E00C3174C /* GreeterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreeterTests.swift; sourceTree = "<group>"; };
+		5BA85649250AA35300C3174C /* Greeter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Greeter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 			children = (
 				5B709349250A77C8007262D6 /* Greeter_Katas_TDD.h */,
 				5B70934A250A77C8007262D6 /* Info.plist */,
+				5BA85649250AA35300C3174C /* Greeter.swift */,
 			);
 			path = "Greeter-Katas-TDD";
 			sourceTree = "<group>";
@@ -148,6 +151,7 @@
 				TargetAttributes = {
 					5B709345250A77C8007262D6 = {
 						CreatedOnToolsVersion = 11.6;
+						LastSwiftMigration = 1160;
 					};
 					5B70934E250A77CD007262D6 = {
 						CreatedOnToolsVersion = 11.6;
@@ -196,6 +200,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BA8564A250AA35400C3174C /* Greeter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,6 +345,7 @@
 		5B70935B250A77CD007262D6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -357,6 +363,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.katas.Greeter-Katas-TDD";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -364,6 +371,7 @@
 		5B70935C250A77CD007262D6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -388,6 +396,7 @@
 		5B70935E250A77CD007262D6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -408,6 +417,7 @@
 		5B70935F250A77CD007262D6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
