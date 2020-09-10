@@ -61,50 +61,22 @@ class GreeterTests: XCTestCase {
     
     func test_greet_outputMorningGreetingMessageDuringMorningInterval() {
         let morningInterval = 6..<12
-        morningInterval.forEach({ hour in
-            let fixedMorningDate = Date().bySettingHour(hour, timeZone: UTCTimeZone())
-            let sut = makeSUT(currentDateProvider: { fixedMorningDate })
-            
-            let receivedGreetingMessage = sut.greet(name: "José")
-            
-            XCTAssertEqual(receivedGreetingMessage, "Good Morning José", "Failed for morning time \(hour)")
-        })
+        expect("Good Morning José", withName: "José", duringHourInterval: morningInterval)
     }
     
     func test_greet_outputAfternoonGreetingMessageDuringAfternoonInterval() {
         let afternoonInterval = 12..<18
-        afternoonInterval.forEach({ hour in
-            let fixedAfternoonDate = Date().bySettingHour(hour, timeZone: UTCTimeZone())
-            let sut = makeSUT(currentDateProvider: { fixedAfternoonDate })
-
-            let receivedGreetingMessage = sut.greet(name: "José")
-
-            XCTAssertEqual(receivedGreetingMessage, "Good Afternoon José")
-        })
+        expect("Good Afternoon José", withName: "José", duringHourInterval: afternoonInterval)
     }
     
     func test_greet_outputEveningGreetingMessageDuringEveningInterval() {
         let eveningInterval = 18..<22
-        eveningInterval.forEach({ hour in
-            let fixedEveningDate = Date().bySettingHour(hour, timeZone: UTCTimeZone())
-            let sut = makeSUT(currentDateProvider: { fixedEveningDate })
-
-            let receivedGreetingMessage = sut.greet(name: "José")
-
-            XCTAssertEqual(receivedGreetingMessage, "Good Evening José")
-        })
+        expect("Good Evening José", withName: "José", duringHourInterval: eveningInterval)
     }
     
     func test_greet_outputNightGreetingMessageDuringNightInterval() {
-        let eveningInterval = [(0..<6), (22..<24)].flatMap({ $0 })
-        eveningInterval.forEach({ hour in
-            let fixedNightDate = Date().bySettingHour(hour, timeZone: UTCTimeZone())
-            let sut = makeSUT(currentDateProvider: { fixedNightDate })
-
-            let receivedGreetingMessage = sut.greet(name: "José")
-
-            XCTAssertEqual(receivedGreetingMessage, "Good Night José")
-        })
+        let nightInterval = [(0..<6), (22..<24)].flatMap({ $0 })
+        expect("Good Night José", withName: "José", duringHourInterval: nightInterval)
     }
     
     // MARK: - Helpers
@@ -115,6 +87,17 @@ class GreeterTests: XCTestCase {
     
     private func UTCTimeZone() -> TimeZone {
         TimeZone(identifier: "UTC")!
+    }
+    
+    func expect<T>(_ expectedValue: String, withName name: String, duringHourInterval hourInterval: T, file: StaticString = #file, line: UInt = #line) where T: RandomAccessCollection, T.Element == Int {
+        hourInterval.forEach({ hour in
+            let fixedDate = Date().bySettingHour(hour, timeZone: UTCTimeZone())
+            let sut = makeSUT(currentDateProvider: { fixedDate })
+
+            let receivedGreetingMessage = sut.greet(name: name)
+
+            XCTAssertEqual(receivedGreetingMessage, expectedValue, file: file, line: line)
+        })
     }
     
 }
