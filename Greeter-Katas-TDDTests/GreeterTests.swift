@@ -11,9 +11,11 @@ import XCTest
 struct Greeter {
     typealias CurrentDateProvider = () -> Date
     private let currentDateProvider: CurrentDateProvider
+    private let timeZone: TimeZone
     
-    init(currentDateProvider: @escaping CurrentDateProvider) {
+    init(currentDateProvider: @escaping CurrentDateProvider, timezone: TimeZone) {
         self.currentDateProvider = currentDateProvider
+        self.timeZone = timezone
     }
     
     func greet(name: String) -> String {
@@ -23,7 +25,18 @@ struct Greeter {
     }
     
     private func greetingMessagePrefix() -> String {
-        "Good Morning"
+        let currentDate = currentDateProvider()
+        var calendar = Calendar.init(identifier: .gregorian)
+        calendar.timeZone = timeZone
+        let hour = calendar.component(.hour, from: currentDate)
+        switch hour {
+        case 6..<12:
+            return "Good Morning"
+        case 12..<18:
+            return "Good Afternoon"
+        default:
+            preconditionFailure("Hours should be between 00:00:00 - 24:00:00, got \(hour) instead")
+        }
     }
 }
 
@@ -41,20 +54,36 @@ class GreeterTests: XCTestCase {
     
     func test_greet_outputMorningGreetingMessageDuringMorningInterval() {
         let morningInterval = 6..<12
-        morningInterval.forEach({ morningHour in
-            let fixedMorningDate = Date().bySettingHour(morningHour)
+        morningInterval.forEach({ hour in
+            let fixedMorningDate = Date().bySettingHour(hour, timeZone: UTCTimeZone())
             let sut = makeSUT(currentDateProvider: { fixedMorningDate })
             
             let receivedGreetingMessage = sut.greet(name: "José")
             
-            XCTAssertEqual(receivedGreetingMessage, "Good Morning José")
+            XCTAssertEqual(receivedGreetingMessage, "Good Morning José", "Failed for morning time \(hour)")
+        })
+    }
+    
+    func test_greet_outputAfternoonGreetingMessageDuringAfternoonInterval() {
+        let morningInterval = 12..<18
+        morningInterval.forEach({ hour in
+            let fixedAfternoonDate = Date().bySettingHour(hour, timeZone: UTCTimeZone())
+            let sut = makeSUT(currentDateProvider: { fixedAfternoonDate })
+
+            let receivedGreetingMessage = sut.greet(name: "José")
+
+            XCTAssertEqual(receivedGreetingMessage, "Good Afternoon José")
         })
     }
     
     // MARK: - Helpers
     
     private func makeSUT(currentDateProvider: @escaping Greeter.CurrentDateProvider = Date.anyMorning) -> Greeter {
-        Greeter(currentDateProvider: currentDateProvider)
+        return Greeter(currentDateProvider: currentDateProvider, timezone: UTCTimeZone())
+    }
+    
+    private func UTCTimeZone() -> TimeZone {
+        TimeZone(identifier: "UTC")!
     }
     
 }
@@ -65,8 +94,9 @@ fileprivate extension Date {
         Date(timeIntervalSince1970: 1599728400) // 09/10/2020 @ 9:00am (UTC)
     }
     
-    func bySettingHour(_ hour: Int) -> Date {
-        let calendar = Calendar(identifier: .gregorian)
+    func bySettingHour(_ hour: Int, timeZone: TimeZone) -> Date {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
         return calendar.date(bySettingHour: hour, minute: 0, second: 0, of: self)!
     }
     
