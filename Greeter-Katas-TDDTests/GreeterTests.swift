@@ -19,19 +19,19 @@ struct Greeter {
 class GreeterTests: XCTestCase {
 
     func test_greet_outputGreetingMessageWithName() {
-        let sut = Greeter()
-
-        let receivedGreetingMessage = sut.greet(name: "José")
-        
+        let receivedGreetingMessage = makeSUT().greet(name: "José")
         XCTAssertEqual(receivedGreetingMessage, "Hello José")
     }
     
     func test_greet_outputGreetingMessageTrimmingInputName() {
-        let sut = Greeter()
-        
-        let receivedGreetingMessage = sut.greet(name: " José ")
-        
+        let receivedGreetingMessage = makeSUT().greet(name: " José ")
         XCTAssertEqual(receivedGreetingMessage, "Hello José")
+    }
+    
+    // MARK: - Helpers
+    
+    func makeSUT() -> Greeter {
+        Greeter()
     }
 
 }
