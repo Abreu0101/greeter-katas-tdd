@@ -28,21 +28,23 @@ struct Greeter {
     }
     
     private func greetingMessagePrefix() -> String {
-        let currentDate = currentDateProvider()
-        let hour = calendar.component(.hour, from: currentDate)
+        let hour = hourFromCurrentDate()
         switch hour {
-        case 6..<12:
-            return "Good Morning"
-        case 12..<18:
-            return "Good Afternoon"
-        case 18..<22:
-            return "Good Evening"
-        case 0..<6, 22..<24:
-            return "Good Night"
-        default:
-            preconditionFailure("Hours should be between 00:00:00 - 24:00:00, got \(hour) instead")
+        case 6..<12: return "Good Morning"
+        case 12..<18: return "Good Afternoon"
+        case 18..<22: return "Good Evening"
+        case 0..<6, 22..<24: return "Good Night"
+        default: preconditionFailure("Hours should be between 00:00:00 - 24:00:00(exclusive), " +
+                                     "got \(hour) instead")
         }
     }
+    
+    private func hourFromCurrentDate() -> Int {
+        let currentDate = currentDateProvider()
+        let hour = calendar.component(.hour, from: currentDate)
+        return hour
+    }
+    
 }
 
 class GreeterTests: XCTestCase {
