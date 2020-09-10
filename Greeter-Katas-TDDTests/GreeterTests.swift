@@ -30,26 +30,17 @@ struct Greeter {
 class GreeterTests: XCTestCase {
     
     func test_greet_outputGreetingMessageTrimmingInputName() {
-        let morningDate = anyMorningDate()
-        let sut = makeSUT(currentDateProvider: { morningDate })
-        
-        let receivedGreetingMessage = sut.greet(name: " José ")
-        
+        let receivedGreetingMessage = makeSUT().greet(name: " José ")
         XCTAssertEqual(receivedGreetingMessage, "Good Morning José")
     }
     
     func test_greet_outputGreetingMessageWithCapitalizeFirstLetter() {
-        let morningDate = anyMorningDate()
-        let sut = makeSUT(currentDateProvider: { morningDate })
-        
-        let receivedGreetingMessage = sut.greet(name: "josé")
-        
+        let receivedGreetingMessage = makeSUT().greet(name: "josé")
         XCTAssertEqual(receivedGreetingMessage, "Good Morning José")
     }
     
     func test_greet_outputMorningGreetingMessage() {
-        let morningDate = anyMorningDate()
-        let sut = makeSUT(currentDateProvider: { morningDate })
+        let sut = makeSUT(currentDateProvider: { Date.anyMorning() })
         
         let receivedGreetingMessage = sut.greet(name: "José")
         
@@ -58,12 +49,16 @@ class GreeterTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(currentDateProvider: @escaping Greeter.CurrentDateProvider = Date.init) -> Greeter {
+    private func makeSUT(currentDateProvider: @escaping Greeter.CurrentDateProvider = Date.anyMorning) -> Greeter {
         Greeter(currentDateProvider: currentDateProvider)
     }
     
-    private func anyMorningDate() -> Date {
+}
+
+fileprivate extension Date {
+    
+    static func anyMorning() -> Date {
         Date(timeIntervalSince1970: 1599728400) // 09/10/2020 @ 9:00am (UTC)
     }
-
+    
 }
