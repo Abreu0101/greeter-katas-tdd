@@ -39,14 +39,6 @@ class GreeterTests: XCTestCase {
         XCTAssertEqual(receivedGreetingMessage, "Good Morning José")
     }
     
-    func test_greet_outputMorningGreetingMessage() {
-        let sut = makeSUT(currentDateProvider: { Date.anyMorning() })
-        
-        let receivedGreetingMessage = sut.greet(name: "José")
-        
-        XCTAssertEqual(receivedGreetingMessage, "Good Morning José")
-    }
-    
     func test_greet_outputMorningGreetingMessageDuringMorningInterval() {
         let morningInterval = 6..<12
         morningInterval.forEach({ morningHour in
