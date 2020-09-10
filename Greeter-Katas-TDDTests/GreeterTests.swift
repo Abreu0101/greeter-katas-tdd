@@ -30,7 +30,7 @@ struct Greeter {
 class GreeterTests: XCTestCase {
     
     func test_greet_outputGreetingMessageTrimmingInputName() {
-        let morningDate = Date(timeIntervalSince1970: 1599728400)
+        let morningDate = anyMorningDate()
         let sut = makeSUT(currentDateProvider: { morningDate })
         
         let receivedGreetingMessage = sut.greet(name: " José ")
@@ -39,7 +39,7 @@ class GreeterTests: XCTestCase {
     }
     
     func test_greet_outputGreetingMessageWithCapitalizeFirstLetter() {
-        let morningDate = Date(timeIntervalSince1970: 1599728400)
+        let morningDate = anyMorningDate()
         let sut = makeSUT(currentDateProvider: { morningDate })
         
         let receivedGreetingMessage = sut.greet(name: "josé")
@@ -48,7 +48,7 @@ class GreeterTests: XCTestCase {
     }
     
     func test_greet_outputMorningGreetingMessage() {
-        let morningDate = Date(timeIntervalSince1970: 1599728400)
+        let morningDate = anyMorningDate()
         let sut = makeSUT(currentDateProvider: { morningDate })
         
         let receivedGreetingMessage = sut.greet(name: "José")
@@ -58,8 +58,12 @@ class GreeterTests: XCTestCase {
     
     // MARK: - Helpers
     
-    func makeSUT(currentDateProvider: @escaping Greeter.CurrentDateProvider = Date.init) -> Greeter {
+    private func makeSUT(currentDateProvider: @escaping Greeter.CurrentDateProvider = Date.init) -> Greeter {
         Greeter(currentDateProvider: currentDateProvider)
+    }
+    
+    private func anyMorningDate() -> Date {
+        Date(timeIntervalSince1970: 1599728400) // 09/10/2020 @ 9:00am (UTC)
     }
 
 }
