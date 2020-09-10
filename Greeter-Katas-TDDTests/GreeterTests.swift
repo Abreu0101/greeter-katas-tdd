@@ -65,8 +65,8 @@ class GreeterTests: XCTestCase {
     }
     
     func test_greet_outputAfternoonGreetingMessageDuringAfternoonInterval() {
-        let morningInterval = 12..<18
-        morningInterval.forEach({ hour in
+        let afternoonInterval = 12..<18
+        afternoonInterval.forEach({ hour in
             let fixedAfternoonDate = Date().bySettingHour(hour, timeZone: UTCTimeZone())
             let sut = makeSUT(currentDateProvider: { fixedAfternoonDate })
 
