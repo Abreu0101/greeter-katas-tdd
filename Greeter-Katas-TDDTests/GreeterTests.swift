@@ -8,12 +8,15 @@
 
 import XCTest
 
-struct Greeter {
-    typealias CurrentDateProvider = () -> Date
+public struct Greeter {
+    public typealias CurrentDateProvider = () -> Date
+    public typealias Logger = (String) -> Void
+    
     private let currentDateProvider: CurrentDateProvider
     private let calendar: Calendar
+    public var logger: Logger?
     
-    init(currentDateProvider: @escaping CurrentDateProvider, timeZone: TimeZone) {
+    public init(currentDateProvider: @escaping CurrentDateProvider, timeZone: TimeZone) {
         self.currentDateProvider = currentDateProvider
         
         var calendar = Calendar.init(identifier: .gregorian)
@@ -21,10 +24,12 @@ struct Greeter {
         self.calendar = calendar
     }
     
-    func greet(name: String) -> String {
+    public func greet(name: String) -> String {
         let capitalizedName = name.capitalized
         let trimmedInputName = capitalizedName.trimmingCharacters(in: .whitespacesAndNewlines)
-        return "\(greetingMessagePrefix()) \(trimmedInputName)"
+        let greetingMessage = "\(greetingMessagePrefix()) \(trimmedInputName)"
+        logger?(greetingMessage)
+        return greetingMessage
     }
     
     private func greetingMessagePrefix() -> String {
@@ -79,6 +84,22 @@ class GreeterTests: XCTestCase {
         expect("Good Night José", withName: "José", duringHourInterval: nightInterval)
     }
     
+    func test_greet_logsGreetingMessage() {
+        var sut = makeSUT()
+        
+        let exp = expectation(description: "Wait for logger call")
+        var receivedLogMessage: String?
+        sut.logger = { logMessage in
+            receivedLogMessage = logMessage
+            exp.fulfill()
+        }
+        
+        _ = sut.greet(name: "Robert")
+        wait(for: [exp], timeout: 1.0)
+        
+        XCTAssertEqual(receivedLogMessage, "Good Morning Robert")
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(currentDateProvider: @escaping Greeter.CurrentDateProvider = Date.anyMorning) -> Greeter {
@@ -89,7 +110,7 @@ class GreeterTests: XCTestCase {
         TimeZone(identifier: "UTC")!
     }
     
-    func expect<T>(_ expectedValue: String, withName name: String, duringHourInterval hourInterval: T, file: StaticString = #file, line: UInt = #line) where T: RandomAccessCollection, T.Element == Int {
+    private func expect<T>(_ expectedValue: String, withName name: String, duringHourInterval hourInterval: T, file: StaticString = #file, line: UInt = #line) where T: RandomAccessCollection, T.Element == Int {
         hourInterval.forEach({ hour in
             let fixedDate = Date().bySettingHour(hour, timeZone: UTCTimeZone())
             let sut = makeSUT(currentDateProvider: { fixedDate })
