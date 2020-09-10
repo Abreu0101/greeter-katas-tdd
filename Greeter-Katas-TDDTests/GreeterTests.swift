@@ -11,8 +11,9 @@ import XCTest
 struct Greeter {
     
     func greet(name: String) -> String {
-        let trimmedInputName = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        return "Hello \(trimmedInputName.capitalized)"
+        let capitalizedName = name.capitalized
+        let trimmedInputName = capitalizedName.trimmingCharacters(in: .whitespacesAndNewlines)
+        return "Hello \(trimmedInputName)"
     }
     
 }
