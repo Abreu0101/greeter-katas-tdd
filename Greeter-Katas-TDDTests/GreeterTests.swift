@@ -9,36 +9,66 @@
 import XCTest
 
 struct Greeter {
+    typealias CurrentDateProvider = () -> Date
+    private let currentDateProvider: CurrentDateProvider
+    
+    init(currentDateProvider: @escaping CurrentDateProvider) {
+        self.currentDateProvider = currentDateProvider
+    }
     
     func greet(name: String) -> String {
         let capitalizedName = name.capitalized
         let trimmedInputName = capitalizedName.trimmingCharacters(in: .whitespacesAndNewlines)
-        return "Hello \(trimmedInputName)"
+        return "\(greetingMessagePrefix()) \(trimmedInputName)"
     }
     
+    private func greetingMessagePrefix() -> String {
+        "Good Morning"
+    }
 }
 
 class GreeterTests: XCTestCase {
 
     func test_greet_outputGreetingMessageWithName() {
-        let receivedGreetingMessage = makeSUT().greet(name: "José")
-        XCTAssertEqual(receivedGreetingMessage, "Hello José")
+        let morningDate = Date(timeIntervalSince1970: 1599728400)
+        let sut = makeSUT(currentDateProvider: { morningDate })
+        
+        let receivedGreetingMessage = sut.greet(name: "José")
+        
+        XCTAssertEqual(receivedGreetingMessage, "Good Morning José")
     }
     
     func test_greet_outputGreetingMessageTrimmingInputName() {
-        let receivedGreetingMessage = makeSUT().greet(name: " José ")
-        XCTAssertEqual(receivedGreetingMessage, "Hello José")
+        let morningDate = Date(timeIntervalSince1970: 1599728400)
+        let sut = makeSUT(currentDateProvider: { morningDate })
+        
+        let receivedGreetingMessage = sut.greet(name: " José ")
+        
+        XCTAssertEqual(receivedGreetingMessage, "Good Morning José")
     }
     
     func test_greet_outputGreetingMessageWithCapitalizeFirstLetter() {
-        let receivedGreetingMessage = makeSUT().greet(name: "josé")
-        XCTAssertEqual(receivedGreetingMessage, "Hello José")
+        let morningDate = Date(timeIntervalSince1970: 1599728400)
+        let sut = makeSUT(currentDateProvider: { morningDate })
+        
+        let receivedGreetingMessage = sut.greet(name: "josé")
+        
+        XCTAssertEqual(receivedGreetingMessage, "Good Morning José")
+    }
+    
+    func test_greet_outputMorningGreetingMessage() {
+        let morningDate = Date(timeIntervalSince1970: 1599728400)
+        let sut = makeSUT(currentDateProvider: { morningDate })
+        
+        let receivedGreetingMessage = sut.greet(name: "José")
+        
+        XCTAssertEqual(receivedGreetingMessage, "Good Morning José")
     }
     
     // MARK: - Helpers
     
-    func makeSUT() -> Greeter {
-        Greeter()
+    func makeSUT(currentDateProvider: @escaping Greeter.CurrentDateProvider = Date.init) -> Greeter {
+        Greeter(currentDateProvider: currentDateProvider)
     }
 
 }
