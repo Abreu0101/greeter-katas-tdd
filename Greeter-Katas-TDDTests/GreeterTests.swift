@@ -11,7 +11,7 @@ import XCTest
 struct Greeter {
     
     func greet(name: String) -> String {
-        return "Hello \(name)"
+        return "Hello \(name.trimmingCharacters(in: .whitespacesAndNewlines))"
     }
     
 }
@@ -22,6 +22,14 @@ class GreeterTests: XCTestCase {
         let sut = Greeter()
 
         let receivedGreetingMessage = sut.greet(name: "José")
+        
+        XCTAssertEqual(receivedGreetingMessage, "Hello José")
+    }
+    
+    func test_greet_outputGreetingMessageTrimmingInputName() {
+        let sut = Greeter()
+        
+        let receivedGreetingMessage = sut.greet(name: " José ")
         
         XCTAssertEqual(receivedGreetingMessage, "Hello José")
     }
