@@ -10,12 +10,20 @@ import XCTest
 
 struct Greeter {
     
+    func greet(name: String) -> String {
+        return "Hello \(name)"
+    }
+    
 }
 
 class GreeterTests: XCTestCase {
 
-    func test_init() {
-        let _ = Greeter()
+    func test_greet_outputGreetingMessageWithName() {
+        let sut = Greeter()
+
+        let receivedGreetingMessage = sut.greet(name: "José")
+        
+        XCTAssertEqual(receivedGreetingMessage, "Hello José")
     }
 
 }
