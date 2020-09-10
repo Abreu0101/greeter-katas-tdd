@@ -34,6 +34,8 @@ struct Greeter {
             return "Good Morning"
         case 12..<18:
             return "Good Afternoon"
+        case 18..<22:
+            return "Good Evening"
         default:
             preconditionFailure("Hours should be between 00:00:00 - 24:00:00, got \(hour) instead")
         }
@@ -73,6 +75,18 @@ class GreeterTests: XCTestCase {
             let receivedGreetingMessage = sut.greet(name: "José")
 
             XCTAssertEqual(receivedGreetingMessage, "Good Afternoon José")
+        })
+    }
+    
+    func test_greet_outputEveningGreetingMessageDuringEveningInterval() {
+        let eveningInterval = 18..<22
+        eveningInterval.forEach({ hour in
+            let fixedEveningDate = Date().bySettingHour(hour, timeZone: UTCTimeZone())
+            let sut = makeSUT(currentDateProvider: { fixedEveningDate })
+
+            let receivedGreetingMessage = sut.greet(name: "José")
+
+            XCTAssertEqual(receivedGreetingMessage, "Good Evening José")
         })
     }
     
