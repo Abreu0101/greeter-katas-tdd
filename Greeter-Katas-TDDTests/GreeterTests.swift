@@ -28,15 +28,6 @@ struct Greeter {
 }
 
 class GreeterTests: XCTestCase {
-
-    func test_greet_outputGreetingMessageWithName() {
-        let morningDate = Date(timeIntervalSince1970: 1599728400)
-        let sut = makeSUT(currentDateProvider: { morningDate })
-        
-        let receivedGreetingMessage = sut.greet(name: "José")
-        
-        XCTAssertEqual(receivedGreetingMessage, "Good Morning José")
-    }
     
     func test_greet_outputGreetingMessageTrimmingInputName() {
         let morningDate = Date(timeIntervalSince1970: 1599728400)
