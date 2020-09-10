@@ -12,7 +12,7 @@ struct Greeter {
     
     func greet(name: String) -> String {
         let trimmedInputName = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        return "Hello \(trimmedInputName)"
+        return "Hello \(trimmedInputName.capitalized)"
     }
     
 }
@@ -26,6 +26,11 @@ class GreeterTests: XCTestCase {
     
     func test_greet_outputGreetingMessageTrimmingInputName() {
         let receivedGreetingMessage = makeSUT().greet(name: " José ")
+        XCTAssertEqual(receivedGreetingMessage, "Hello José")
+    }
+    
+    func test_greet_outputGreetingMessageWithCapitalizeFirstLetter() {
+        let receivedGreetingMessage = makeSUT().greet(name: "josé")
         XCTAssertEqual(receivedGreetingMessage, "Hello José")
     }
     
